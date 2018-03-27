@@ -19,12 +19,12 @@ var testOptions = {
   acceleration: false,
   ultrasonic: false,
   airQuality: false,
-  dhtDigital: false,
+  dhtDigital: true,
   lightAnalog: false,
   digitalButton: true,
   loudnessAnalog: false,
   rotaryAngle: true,
-  dust: true,
+  dust: false,
   customAccelerationReading: false
 }
 
