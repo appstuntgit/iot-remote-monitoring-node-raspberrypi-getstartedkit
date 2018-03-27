@@ -1,4 +1,17 @@
 'use strict';
+'use strict';
+var GrovePi = require('./libs').GrovePi
+var Commands = GrovePi.commands
+var Board = GrovePi.board
+var AccelerationI2cSensor = GrovePi.sensors.AccelerationI2C
+var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
+var AirQualityAnalogSensor = GrovePi.sensors.AirQualityAnalog
+var DHTDigitalSensor = GrovePi.sensors.DHTDigital
+var LightAnalogSensor = GrovePi.sensors.LightAnalog
+var DigitalButtonSensor = GrovePi.sensors.DigitalButton
+var LoudnessAnalogSensor = GrovePi.sensors.LoudnessAnalog
+var RotaryAngleAnalogSensor = GrovePi.sensors.RotaryAnalog
+var DustDigitalSensor = GrovePi.sensors.dustDigital
 
 
 var Protocol = require('azure-iot-device-mqtt').Mqtt;
@@ -7,7 +20,7 @@ var ConnectionString = require('azure-iot-device').ConnectionString;
 var Message = require('azure-iot-device').Message;
 
 var connectionString =
-    'HostName=[IoTHubName].azure-devices.net;DeviceId=[Device Id];SharedAccessKey=[Device Key]';
+    'HostName=dtsummitrmprevdemo7419a.azure-devices.net;DeviceId=rasppi;SharedAccessKey=DcNC9VS/8ITBtIqJUF3ZTXMdHEizIpsM1lnhsUgco3U=';
 var deviceId = ConnectionString.parse(connectionString).DeviceId;
 
 var temperature = 50;
@@ -126,14 +139,19 @@ client.open(function(err) {
     });
 
     // Start sending telemetry
+
+    var dhtSensor = new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS)
+
     var sendInterval = setInterval(function() {
       temperature += generateRandomIncrement();
       humidity += generateRandomIncrement();
 
       var data = JSON.stringify({
         'DeviceID': deviceId,
-        'Temperature': temperature,
-        'Humidity': humidity
+      //  'Temperature': temperature,
+      //  'Humidity': humidity
+        'Temperature': dhtSensor.prototype.read[0],
+        'Humidity': dhtSensor.prototype.read[1]
       });
 
       console.log('Sending device event data:\n' + data);
