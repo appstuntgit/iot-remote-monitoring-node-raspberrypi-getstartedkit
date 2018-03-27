@@ -81,7 +81,7 @@ function start() {
         }
 
         if (testOptions.dhtDigital) {
-          var dhtSensor = new DHTDigitalSensor(3, DHTDigitalSensor.VERSION.DHT22, DHTDigitalSensor.CELSIUS)
+          var dhtSensor = new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS)
           // Digital Port 3
           // DHT Sensor
           console.log('DHT Digital Sensor (start watch)')
