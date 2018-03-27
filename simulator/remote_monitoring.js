@@ -1,5 +1,4 @@
 'use strict';
-'use strict';
 var GrovePi = require('./libs').GrovePi
 var Commands = GrovePi.commands
 var Board = GrovePi.board
@@ -19,9 +18,10 @@ var Client = require('azure-iot-device').Client;
 var ConnectionString = require('azure-iot-device').ConnectionString;
 var Message = require('azure-iot-device').Message;
 
-var connectionString =
-    'HostName=dtsummitrmprevdemo7419a.azure-devices.net;DeviceId=rasppi;SharedAccessKey=DcNC9VS/8ITBtIqJUF3ZTXMdHEizIpsM1lnhsUgco3U=';
+var connectionString = 'HostName=dtsummitrmprevdemo7419a.azure-devices.net;DeviceId=rasppi;SharedAccessKey=DcNC9VS/8ITBtIqJUF3ZTXMdHEizIpsM1lnhsUgco3U=';
 var deviceId = ConnectionString.parse(connectionString).DeviceId;
+
+var board
 
 var temperature = 50;
 var humidity = 50;
@@ -37,7 +37,8 @@ function generateRandomIncrement() {
   return ((Math.random() * 2) - 1);
 }
 
-
+board = new Board();
+board.init();
 
 var deviceMetaData = {
   'ObjectType': 'DeviceInfo',
@@ -140,23 +141,26 @@ client.open(function(err) {
 
     // Start sending telemetry
 
+
     var dhtSensor = new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS)
 
     var sendInterval = setInterval(function() {
-      temperature += generateRandomIncrement();
-      humidity += generateRandomIncrement();
+      //temperature += generateRandomIncrement();
+      temperature = dhtSensor.read();  	
+      //humidity += generateRandomIncrement();
+      humidity = dhtSensor.read();
 
       var data = JSON.stringify({
         'DeviceID': deviceId,
-      //  'Temperature': temperature,
-      //  'Humidity': humidity
-        'Temperature': dhtSensor.prototype.read[0],
-        'Humidity': dhtSensor.prototype.read[1]
+        'Temperature': temperature[0],
+        'Humidity': (humidity[1] < 40 ? humidity[1]: 40)
+      
       });
 
       console.log('Sending device event data:\n' + data);
       client.sendEvent(new Message(data), printErrorFor('send event'));
     }, 5000);
+   
 
     client.on('error', function(err) {
       printErrorFor('client')(err);
