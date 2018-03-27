@@ -21,9 +21,9 @@ var testOptions = {
   airQuality: false,
   dhtDigital: true,
   lightAnalog: false,
-  digitalButton: true,
+  digitalButton: false,
   loudnessAnalog: false,
-  rotaryAngle: true,
+  rotaryAngle: false,
   dust: false,
   customAccelerationReading: false
 }
