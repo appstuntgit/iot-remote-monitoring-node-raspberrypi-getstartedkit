@@ -1,4 +1,16 @@
 'use strict';
+var GrovePi = require('./libs').GrovePi
+var Commands = GrovePi.commands
+var Board = GrovePi.board
+var AccelerationI2cSensor = GrovePi.sensors.AccelerationI2C
+var UltrasonicDigitalSensor = GrovePi.sensors.UltrasonicDigital
+var AirQualityAnalogSensor = GrovePi.sensors.AirQualityAnalog
+var DHTDigitalSensor = GrovePi.sensors.DHTDigital
+var LightAnalogSensor = GrovePi.sensors.LightAnalog
+var DigitalButtonSensor = GrovePi.sensors.DigitalButton
+var LoudnessAnalogSensor = GrovePi.sensors.LoudnessAnalog
+var RotaryAngleAnalogSensor = GrovePi.sensors.RotaryAnalog
+var DustDigitalSensor = GrovePi.sensors.dustDigital
 
 var raspberry = require('./raspberry');
 var Protocol = require('azure-iot-device-mqtt').Mqtt;
@@ -7,7 +19,7 @@ var ConnectionString = require('azure-iot-device').ConnectionString;
 var Message = require('azure-iot-device').Message;
 
 var connectionString =
-    'HostName=[Your IoT Hub name].azure-devices.com;DeviceId=[Your device ID];SharedAccessKey=[Your device key]';
+    'HostName=dtsummitrmprevdemo7419a.azure-devices.net;DeviceId=rasppi;SharedAccessKey=DcNC9VS/8ITBtIqJUF3ZTXMdHEizIpsM1lnhsUgco3U=';
 var deviceId = ConnectionString.parse(connectionString).DeviceId;
 var sensorData = raspberry.getSensorData();
 
@@ -140,11 +152,18 @@ client.open(function(err) {
 
     var updateEvent =
         function() {
-      sensorData = raspberry.getSensorData();
+
+      //sensorData = raspberry.getSensorData();
+      var dhtSensor = new DHTDigitalSensor(7, DHTDigitalSensor.VERSION.DHT11, DHTDigitalSensor.CELSIUS)
+      
+      
+      
       var data = JSON.stringify({
         'DeviceID': deviceId,
-        'Temperature': sensorData.temperature,
-        'Humidity': sensorData.humidity
+      //  'Temperature': sensorData.temperature,
+      //  'Humidity': sensorData.humidity  
+        'Temperature': dhtSensor.prototype.read[0],
+        'Humidity': dhtSensor.prototype.read[1]
       });
 
       console.log('Sending device event data:\n' + data);
